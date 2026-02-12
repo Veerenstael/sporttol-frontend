@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Op naar de 10 Miljoen Stappen | Veerenstael</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="loading-banner" id="loadingBanner">⏳ Data wordt geladen...</div>
+
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <img src="header.png" alt="Veerenstael" onerror="this.style.display='none'">
+      <div class="navbar-title">Op naar de <span>10 Miljoen</span> Stappen</div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="active">Dashboard</a>
+      <a href="invoer.html">Invoer</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="page-header">
+      <h1>😊 Op naar de 10 Miljoen</h1>
+      <p>Maart 2026 — Samen bewegen, samen winnen!</p>
+    </div>
+
+    <div class="progress-section">
+      <h2>Voortgang naar 10.000.000 stappen</h2>
+      <div class="progress-big-number" id="totalSteps">
+        <div class="skeleton skeleton-text" style="width:200px;height:48px;margin:0 auto;"></div>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" id="progressBar" style="width:2%">
+          <span class="progress-bar-text" id="progressText"></span>
+        </div>
+      </div>
+      <div class="progress-subtitle" id="progressSubtitle">Data wordt opgehaald...</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>🏆 Team Ranking</h3>
+        <div id="teamLeaderboard">
+          <div class="skeleton skeleton-bar"></div>
+          <div class="skeleton skeleton-bar"></div>
+          <div class="skeleton skeleton-bar"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📊 Stappen per Team</h3>
+        <div class="chart-container">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:2rem;">
+      <h3>📈 Voortgang per Team (Cumulatief)</h3>
+      <div class="chart-container" style="height:350px;">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⭐ Top 10 Individueel</h3>
+      <div id="individualLeaderboard">
+        <div class="skeleton skeleton-bar"></div>
+        <div class="skeleton skeleton-bar"></div>
+        <div class="skeleton skeleton-bar"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

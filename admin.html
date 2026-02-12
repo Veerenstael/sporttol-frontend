@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Veerenstael Stappen</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="loading-banner" id="loadingBanner">⏳ Verbinden met server...</div>
+
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <img src="header.png" alt="Veerenstael" onerror="this.style.display='none'">
+      <div class="navbar-title">Op naar de <span>10 Miljoen</span> Stappen</div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="invoer.html">Invoer</a>
+      <a href="admin.html" class="active">Admin</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Login -->
+    <div id="loginSection" class="admin-login">
+      <div class="form-section">
+        <h2>🔐 Admin Login</h2>
+        <div class="form-group">
+          <label>Wachtwoord</label>
+          <input type="password" id="passwordInput" placeholder="Voer admin wachtwoord in" onkeydown="if(event.key==='Enter') adminLogin()">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="adminLogin()">Inloggen</button>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" style="display:none;">
+      <div class="page-header">
+        <h1>⚙️ Admin Paneel</h1>
+        <p>Beheer teams, activiteiten en invoer</p>
+      </div>
+
+      <!-- Activities -->
+      <div class="form-section">
+        <h3 style="margin-bottom:1rem;color:var(--blauw);">🏃 Bonusactiviteiten Beheren</h3>
+        <div id="activitiesList" style="margin-bottom:1rem;"></div>
+        <div style="border-top:2px solid var(--offblue);padding-top:1rem;">
+          <div class="grid-2" style="margin-bottom:0;">
+            <div class="form-group">
+              <label>Naam</label>
+              <input type="text" id="newActivityName" placeholder="bijv. Squash">
+            </div>
+            <div class="form-group">
+              <label>Emoji</label>
+              <input type="text" id="newActivityEmoji" placeholder="bijv. 🎾" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Bonusstappen</label>
+            <input type="number" id="newActivitySteps" placeholder="bijv. 5000" min="0">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="addActivity()">+ Activiteit Toevoegen</button>
+        </div>
+      </div>
+
+      <!-- Teams -->
+      <div class="form-section">
+        <h3 style="margin-bottom:1rem;color:var(--blauw);">👥 Nieuw Team Toevoegen</h3>
+        <div class="form-group">
+          <label>Teamnaam</label>
+          <input type="text" id="newTeamName" placeholder="bijv. Team Blauw">
+        </div>
+        <div class="form-group">
+          <label>Teamleden (kommagescheiden)</label>
+          <input type="text" id="newTeamMembers" placeholder="bijv. Jan, Piet, Klaas, Marie, Anna">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="addTeam()">+ Team Toevoegen</button>
+      </div>
+
+      <div class="card" style="margin-bottom:2rem;">
+        <h3>📋 Teams Beheren</h3>
+        <div id="teamsList"></div>
+      </div>
+
+      <!-- Entries -->
+      <div class="card" style="margin-bottom:2rem;">
+        <h3>🔧 Invoer Beheren</h3>
+        <div class="grid-2" style="margin-bottom:1rem;">
+          <div class="form-group">
+            <label>Team</label>
+            <select id="adminTeamSelect" onchange="loadAdminMembers()">
+              <option value="">— Kies team —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Lid</label>
+            <select id="adminMemberSelect" onchange="loadAdminEntries()">
+              <option value="">— Alle leden —</option>
+            </select>
+          </div>
+        </div>
+        <div id="adminEntries">
+          <p style="color:#888;text-align:center;padding:1rem 0;">Selecteer een team om invoer te bekijken.</p>
+        </div>
+      </div>
+
+      <!-- Quick Entry -->
+      <div class="form-section">
+        <h3 style="margin-bottom:1rem;color:var(--blauw);">⚡ Snelle Invoer (Admin)</h3>
+        <div class="form-group">
+          <label>Team</label>
+          <select id="quickTeamSelect" onchange="loadQuickMembers()">
+            <option value="">— Kies team —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Lid</label>
+          <select id="quickMemberSelect">
+            <option value="">— Kies lid —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Datum</label>
+          <input type="date" id="quickDate">
+        </div>
+        <div class="form-group">
+          <label>Stappen</label>
+          <input type="number" id="quickSteps" placeholder="bijv. 12000" min="0" max="35000">
+          <div class="form-hint">Maximaal 35.000 stappen per dag</div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="quickSubmit()">✅ Opslaan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Entry Modal -->
+  <div class="modal-overlay" id="editModal" style="display:none;">
+    <div class="modal">
+      <h3 style="margin-bottom:1rem;color:var(--blauw);">✏️ Invoer Aanpassen</h3>
+      <input type="hidden" id="editEntryId">
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" id="editDate">
+      </div>
+      <div class="form-group">
+        <label>Stappen</label>
+        <input type="number" id="editSteps" min="0" max="35000">
+        <div class="form-hint">Maximaal 35.000 stappen per dag</div>
+      </div>
+      <div class="form-group">
+        <label>Bonusactiviteiten</label>
+        <div class="activities-grid" id="editActivitiesGrid"></div>
+      </div>
+      <div class="form-group">
+        <label>Multipliers</label>
+        <label class="multiplier-option" onclick="toggleEditMult(this)">
+          <input type="checkbox" id="editWithColleagues">
+          <div class="multiplier-info">
+            <div class="multiplier-label">👥 Met collega's</div>
+          </div>
+          <div class="multiplier-badge">×1.5</div>
+        </label>
+        <label class="multiplier-option" onclick="toggleEditMult(this)">
+          <input type="checkbox" id="editPhotoShared">
+          <div class="multiplier-info">
+            <div class="multiplier-label">📸 Foto gedeeld</div>
+          </div>
+          <div class="multiplier-badge">×1.25</div>
+        </label>
+      </div>
+      <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveEditEntry()">💾 Opslaan</button>
+        <button class="btn btn-secondary" style="flex:1;" onclick="closeEditModal()">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

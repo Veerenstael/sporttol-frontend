@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stappen Invoeren | Veerenstael</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="loading-banner" id="loadingBanner">⏳ Verbinden met server...</div>
+
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <img src="header.png" alt="Veerenstael" onerror="this.style.display='none'">
+      <div class="navbar-title">Op naar de <span>10 Miljoen</span> Stappen</div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="invoer.html" class="active">Invoer</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>📝 Stappen Invoeren</h1>
+      <p>Vul je dagelijkse stappen in en geef bonusactiviteiten op</p>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label>Team</label>
+        <select id="teamSelect" onchange="loadMembers()">
+          <option value="">— Laden... —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Naam</label>
+        <select id="memberSelect">
+          <option value="">— Kies eerst een team —</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" id="dateInput">
+      </div>
+
+      <div class="form-group">
+        <label>Aantal stappen</label>
+        <input type="number" id="stepsInput" placeholder="bijv. 8500" min="0" max="35000" step="100" oninput="updatePreview()">
+        <div class="form-hint">Maximaal 35.000 stappen per dag</div>
+      </div>
+
+      <div class="form-group">
+        <label>Bonusactiviteiten (optioneel)</label>
+        <div class="activities-grid" id="activitiesGrid">
+          <div class="skeleton skeleton-bar"></div>
+        </div>
+      </div>
+
+      <div class="multipliers-section">
+        <label style="display:block;font-weight:700;font-size:0.85rem;color:var(--blauw);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.5px;">Multipliers</label>
+
+        <label class="multiplier-option" onclick="toggleMultiplier(this)">
+          <input type="checkbox" id="withColleagues" onchange="updatePreview()">
+          <div class="multiplier-info">
+            <div class="multiplier-label">👥 Met collega's</div>
+            <div class="multiplier-desc">Activiteit samen met collega's gedaan</div>
+          </div>
+          <div class="multiplier-badge">×1.5</div>
+        </label>
+
+        <label class="multiplier-option" onclick="toggleMultiplier(this)">
+          <input type="checkbox" id="photoShared" onchange="updatePreview()">
+          <div class="multiplier-info">
+            <div class="multiplier-label">📸 Foto gedeeld</div>
+            <div class="multiplier-desc">Foto gemaakt en met Marketing gedeeld</div>
+          </div>
+          <div class="multiplier-badge">×1.25</div>
+        </label>
+      </div>
+
+      <div class="total-preview">
+        <div>
+          <div class="total-preview-label">Totaal vandaag</div>
+          <div style="font-size:0.75rem;color:#aaa;" id="previewBreakdown"></div>
+        </div>
+        <div class="total-preview-value" id="previewTotal">0</div>
+      </div>
+
+      <button class="btn btn-primary btn-full" style="margin-top:1.25rem;" onclick="submitEntry()">
+        ✅ Stappen Opslaan
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📋 Recente Invoer</h3>
+      <div id="recentEntries">
+        <p style="color:#888;text-align:center;padding:1rem 0;">Selecteer een team en persoon om recente invoer te zien.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="js/config.js"></script>
+  <script src="js/invoer.js"></script>
+</body>
+</html>
